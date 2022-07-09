@@ -28,7 +28,7 @@ void user::remind_task()//任务提醒
 
     string now_time="2022-00-00 00:00:00";
     string yyyy=std::to_string(p->tm_year+1900);
-    string mm=std::to_string(p->tm_mon);
+    string mm=std::to_string(p->tm_mon+1);
     string dd=std::to_string(p->tm_mday);
     string hh=std::to_string(p->tm_hour);
     string ff=std::to_string(p->tm_min);
@@ -72,7 +72,7 @@ void user::remind_task()//任务提醒
     {
         now_time[15]=ff[0];
     }
-    
+    //cout<<now_time<<endl;
     /*获取最小的提醒时间*/
     
     auto i=user::mytask.begin();//遍历指针
@@ -96,10 +96,11 @@ void user::remind_task()//任务提醒
 
     task tmp_task=j->second;
     string tmp_time=tmp_task.remind_time;
+    string tmp_start_time=tmp_task.start_time;
     
     if(now_time>=tmp_time)
     {
-        cout<<"日程提醒："<<tmp_task.name<<endl;
-        tmp_task.remind_flag=true; // what's the point?
+        cout<<"日程提醒——\n"<<"您的日程"<<tmp_task.name<<"将于"<<tmp_start_time<<"开始\n当前时刻："<<tmp_time<<endl;
+        tmp_task.remind_flag=true;
     }
 }

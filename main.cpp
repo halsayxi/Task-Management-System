@@ -2,6 +2,7 @@
 //  created by halsayxi
 #include <getopt.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <queue>
 #include <cstring>
@@ -15,16 +16,27 @@ extern queue<string> cmdseq;
 extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
 
-// user whx("whx","111");
 
 int main(int argc, char *argv[])
 {
     // after login
     user whx("whx","111");
-
+    
     print_usage();  // print usage string
     printf("Please run the command first!\n > ./MyCalendar run\n");
     
+    //任务加载，先读取文件中的内容并输入到map中
+    whx.load_task();
+    
+    /*    测试Periodic_Scanning    */
+    while(1)
+    {
+        whx.remind_task();
+    }
+    
+    /*    测试Task_Management    */
+    
+    //执行命令行操作
     if(cmdseq.size()!=0)
     clear_queue(cmdseq);
     string cmd;

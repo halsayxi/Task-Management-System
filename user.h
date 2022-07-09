@@ -71,6 +71,7 @@ public:
     void print_task();//任务显示
     void remind_task();//任务提醒
     void done_task();//修改任务信息
+    void load_task();//任务加载
 };
 
 // Account_Management.cpp
