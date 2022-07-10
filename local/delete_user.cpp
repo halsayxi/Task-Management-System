@@ -2,18 +2,20 @@
 #include <fstream>
 #include <cstring>
 #include <cstdio>
+#include <stdlib.h>
 
 using namespace std;
 
 void delete_user(string Name, string Password)
 {
     string fileData, userInfo;
-    int location;
-    string filePath = "C:\\Users\\86177\\Desktop\\code\\user";
-    filePath = filePath + Name;
+    int location, flag;
+    
+    system("cls");
     
     userInfo = Name + Password;
 
+    //删除user中用户信息
     ifstream in("users");
     if (!in) {cerr<<"error! Unable to open the file."; return;}
     in>>fileData;
@@ -26,9 +28,11 @@ void delete_user(string Name, string Password)
     out<<fileData;
     out.close();
 
-    remove(reinterpret_cast<char*> (&filePath));
+    //删除用户存放任务的文件
+    const char* filePath = Name.data();
+    flag = remove(filePath);
 
-    cout<<"account deleted successfully!";
-    //sleep();
-    //system(clear);
+    if (flag != 0) {cout<<"fail to delete the file\n"; return;}
+
+    cout<<"account deleted successfully!\n";
 }
