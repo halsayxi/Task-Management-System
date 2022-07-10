@@ -1,9 +1,16 @@
-#include <delete_user.h>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+
+using namespace std;
 
 void delete_user(string Name, string Password)
 {
     string fileData, userInfo;
     int location;
+    string filePath = "C:\\Users\\86177\\Desktop\\code\\user";
+    filePath = filePath + Name;
     
     userInfo = Name + Password;
 
@@ -19,7 +26,9 @@ void delete_user(string Name, string Password)
     out<<fileData;
     out.close();
 
-    cout<<"账号注销成功！";
+    remove(reinterpret_cast<char*> (&filePath));
+
+    cout<<"account deleted successfully!";
     //sleep();
     //system(clear);
 }

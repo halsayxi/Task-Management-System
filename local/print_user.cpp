@@ -1,16 +1,21 @@
-#include <print_user.h>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+
+using namespace std;
 
 void print_user(string Name, string Password)
 {
     string pw, pw_in;   
     string userInfo, fileData;
     
-    cout<<"请输入密码";
+    cout<<"Please enter the password!";
     cin>>pw;
 
-    if (pw != Password) {cout<<"密码错误！"; return;}
+    if (pw != Password) {cout<<"Wrong password!"; return;}
 
-    cout<<"用户名："<<Name<<endl;
-    cout<<"密码："<<Password<<endl;
+    cout<<"Username:"<<Name<<endl;
+    cout<<"Password:"<<Password<<endl;
     //sleep();
 }

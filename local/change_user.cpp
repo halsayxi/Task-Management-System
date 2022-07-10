@@ -1,24 +1,34 @@
-#include <change_user.h>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+
+using namespace std;
+
+extern string get_hash(string);
 
 void change_user(string Name, string Password)
 {
     string name_new;
     string pw, pw_in, pw_new, pw_in_new;
     string fileData, taskData, userInfo, userInfo2;
-    int location;
+    int location, flag;
+    string filePath = "C:\\Users\\86177\\Desktop\\code\\user";
+    filePath = filePath + Name;
+    //strcat(savePath, reinterpret_cast<char*>(&Name));
 
-    cout<<"请输入密码";
+    cout<<"Please enter the password:";
     cin>>pw;
 
-    if (pw != Password) {cout<<"密码错误！"; return;}
+    if (pw != Password) {cout<<"Wrong password!"; return;}
 
     pw_in = get_hash(pw);
 
     userInfo = Name + pw_in;
 
-    cout<<"请输入新的用户名:";
+    cout<<"Please enter new user name:";
     cin>>name_new;
-    cout<<"请输入新的密码:";
+    cout<<"Please enter new password:";
     cin>>pw_new;
 
     pw_in_new = get_hash(pw_new);
@@ -40,17 +50,19 @@ void change_user(string Name, string Password)
     out.close();
 
     //存放对应任务的文件改名
-    ifstream in(Name);
-    in>>taskData;
-    in.close();
+    ifstream infile(Name);
+    infile>>taskData;
+    infile.close();
 
-    ofstream out(name_new);
-    out<<taskData;
-    out.close();
+    ofstream outfile(name_new);
+    outfile<<taskData;
+    outfile.close();
 
-    remove(reinterpret_cast<char*> (&Name));
+    flag = remove(reinterpret_cast<char*>(&filePath));
 
-    cout<<"账号修改成功！";
+    if (flag != 0){cout<<"file not deleted.";} 
+
+    cout<<"account information changed successfully";
     //sleep();
     //system(clear);
 }

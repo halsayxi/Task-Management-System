@@ -1,4 +1,11 @@
-#include <add_user.h>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+
+using namespace std;
+
+extern string get_hash(string);
 
 void add_user()
 {
@@ -7,21 +14,21 @@ void add_user()
     
     while(1)
     {
-        cout<<"请输入新用户名：";
+        cout<<"Please enter your user name:";
         cin>>name;
-        cout<<"请输入六位数新密码：";
+        cout<<"Please enter the new 6-digit password:";
         cin>>pw;
-        cout<<"请确认新密码：";
+        cout<<"confirm your password:";
         cin>>pw2;
 
         if (pw == pw2 && pw.length() == 6) 
         {
-            cout<<"新账号创建成功！";
+            cout<<"a new account created successfully!";
             break;
         }
-        else cout<<"密码有误，新账号创建失败！";
+        else cout<<"Wrong password. Failed to create a new account.";
     }
-    
+
     pw_in = get_hash(pw);
     
     ofstream out("users",ofstream::app);
@@ -29,7 +36,10 @@ void add_user()
     out<<name<<pw_in;
     out.close();
 
-    ofstream out(name);  //用于存放任务
-    if (!out) {cerr<<"error! Unable to create the file."; return;}
-    out.close();
+    ofstream outfile(name);  //用于存放任务
+    if (!outfile) {cerr<<"error! Unable to create the file."; return;}
+    outfile.close();
+
+    cout<<"file created successfully!";
+
 }
