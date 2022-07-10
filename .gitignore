@@ -32,7 +32,7 @@
 *.app
 
 # directories
-.vscode
+*.vscode
 *.xcodeproj
 
 # other files
