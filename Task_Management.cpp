@@ -25,11 +25,26 @@ void printMap(map<key,task>& m)
 }
 
 // accomplish the functions in class user
-
+extern mutex m; // for multithread use -- lock
 extern queue<string> cmdseq;
 extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
 
+void process_all(user& usr)
+{
+    string cmd;
+    while(1)
+    {
+        if(cmdseq.size()==0)
+        {
+            printf("请输入\nshowtask || donetask || deltask || addtask || exit\n > ");
+            input2cmdseq();
+        }
+        cmd=cmdseq.front();
+        cmdseq.pop();
+        task_process(usr,cmd);
+    }
+}
 
 int task_process(user& usr, string cmd)
 {
@@ -216,7 +231,16 @@ void user::insert_task()//任务录入
     tmp_task.remind_flag=false;
     
     //将tmp_task添加到mytask队尾
-    mytask.insert(make_pair(tmp_key,tmp_task));
+    unique_lock<mutex> g1(m, try_to_lock);
+    if (g1.owns_lock())
+    {
+        mytask.insert(make_pair(tmp_key,tmp_task));
+    }
+    else
+    {
+        cout << "\nLock Error when add task!\n";
+    }
+    g1.unlock();
     //printMap(mytask);
     
     //将任务tmp_task写入文件
@@ -264,10 +288,19 @@ void user::delete_task()//任务删除
     _time=cmdseq_to_file_time();
 
     //在任务map中删除该任务
-    key key1;
-    key1.name=_name;
-    key1.start_time=_time;
-    mytask.erase(key1);
+    unique_lock<mutex> g1(m, try_to_lock);
+    if (g1.owns_lock())
+    {
+        key key1;
+        key1.name=_name;
+        key1.start_time=_time;
+        mytask.erase(key1);
+    }
+    else
+    {
+        cout << "\nLock Error when delete task!\n";
+    }
+    g1.unlock();
     
     //在文件中删除该任务
     while(getline(in,estr))//得到原文件中一行的内容
@@ -331,10 +364,19 @@ void user::done_task()//任务完成
     _time=cmdseq_to_file_time();
     
     //在任务map中标记该任务已完成
-    key key1;
-    key1.name=_name;
-    key1.start_time=_time;
-    mytask[key1].flag=true;
+    unique_lock<mutex> g1(m, try_to_lock);
+    if (g1.owns_lock())
+    {
+        key key1;
+        key1.name=_name;
+        key1.start_time=_time;
+        mytask[key1].flag=true;
+    }
+    else
+    {
+        cout << "\nLock Error when done task!\n";
+    }
+    g1.unlock();
     
     //在文件中标记该任务已完成
     while(getline(in,estr))//得到原文件中一行的内容

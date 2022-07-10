@@ -29,28 +29,18 @@ int main(int argc, char *argv[])
     whx.load_task();
     
     /*    测试Periodic_Scanning    */
-    while(1)
-    {
-        whx.remind_task();
-    }
+    thread task_arrangement(process_all, ref(whx));
+    thread task_scanning(&user::remind_all, &whx);
+
+    task_arrangement.join();
+    task_scanning.join();
     
     /*    测试Task_Management    */
     
     //执行命令行操作
     if(cmdseq.size()!=0)
     clear_queue(cmdseq);
-    string cmd;
-    while (1)
-    {
-        if(cmdseq.size()==0)
-        {
-            printf("请输入\nshowtask || donetask || deltask || addtask || exit\n > ");
-            input2cmdseq();
-        }
-        cmd=cmdseq.front();
-        cmdseq.pop();
-        task_process(whx,cmd);
-    }
+    
     return 0;
 }
 

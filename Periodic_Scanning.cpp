@@ -146,3 +146,12 @@ void user::remind_task()//任务提醒
     //     tmp_task.remind_flag=true;
     // }
 }
+
+void user::remind_all()
+{
+    while(1)
+    {
+        remind_task();
+        sleep(10);
+    }
+}
