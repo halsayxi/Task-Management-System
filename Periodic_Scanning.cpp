@@ -12,7 +12,7 @@
 #include <ctime>
 #endif
 using namespace std;
-
+extern mutex m; // for multithread use -- lock
 void user::remind_task()//任务提醒
 {
     /*获取当前时间*/
@@ -74,33 +74,75 @@ void user::remind_task()//任务提醒
     }
     //cout<<now_time<<endl;
     /*获取最小的提醒时间*/
-    
-    auto i=user::mytask.begin();//遍历指针
-    string k=i->second.remind_time;//最小的remind_time
-    auto j=user::mytask.begin();//指向需要被提醒的任务
-    
-    while(i!=user::mytask.end())
+    try
     {
-        if(i->second.flag || i->second.remind_flag)
+        unique_lock<mutex> g2(m, try_to_lock);
+        if (g2.owns_lock())
         {
-            i++;
-            continue;
+            auto i=user::mytask.begin();//遍历指针
+            // string k=i->second.remind_time;//最小的remind_time
+            // auto j=user::mytask.begin();//指向需要被提醒的任务
+
+            int f = 0; // if there is no task being reminded, f=0 and print "No task will be reminded!"
+            while(i!=user::mytask.end())
+            {
+
+                if(i->second.flag == true || i->second.remind_flag == true)   // if flag == true, the task is finished
+                {
+                    i++;
+                    continue;
+                }
+                if((i->second.remind_time< now_time) && (i->second.remind_flag == false))
+                {
+                    cout<<"\n日程提醒："<< i->second.name<<endl;
+                    cout<<"日程提醒——\n"<<"您的日程"<<i->second.name<<"将于"<<i->second.start_time<<"开始\n当前时刻："<< now_time <<endl;
+                    i->second.remind_flag = true;
+                    f = 1;
+                }
+                i++;
+            }
+            if (f == 0) cout << "\nNo task will be reminded!\n";
         }
-        if(i->second.remind_time<k)
+        else
         {
-            k=i->second.remind_time;
-            j=i;
+            cout << "\nLock Error when add task!\n";
         }
-        i++;
+        g2.unlock();
+
+
+    }
+    catch(const std::exception& e)
+    {
+        // std::cerr << e.what() << '\n';
+        cout << "\nmytask is empty!\n";
     }
 
-    task tmp_task=j->second;
-    string tmp_time=tmp_task.remind_time;
-    string tmp_start_time=tmp_task.start_time;
+    // auto i=user::mytask.begin();//遍历指针
+    // string k=i->second.remind_time;//最小的remind_time
+    // auto j=user::mytask.begin();//指向需要被提醒的任务
     
-    if(now_time>=tmp_time)
-    {
-        cout<<"日程提醒——\n"<<"您的日程"<<tmp_task.name<<"将于"<<tmp_start_time<<"开始\n当前时刻："<<tmp_time<<endl;
-        tmp_task.remind_flag=true;
-    }
+    // while(i!=user::mytask.end())
+    // {
+    //     if(i->second.flag || i->second.remind_flag)
+    //     {
+    //         i++;
+    //         continue;
+    //     }
+    //     if(i->second.remind_time<k)
+    //     {
+    //         k=i->second.remind_time;
+    //         j=i;
+    //     }
+    //     i++;
+    // }
+
+    // task tmp_task=j->second;
+    // string tmp_time=tmp_task.remind_time;
+    // string tmp_start_time=tmp_task.start_time;
+    
+    // if(now_time>=tmp_time)
+    // {
+    //     cout<<"日程提醒——\n"<<"您的日程"<<tmp_task.name<<"将于"<<tmp_start_time<<"开始\n当前时刻："<<tmp_time<<endl;
+    //     tmp_task.remind_flag=true;
+    // }
 }

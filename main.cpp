@@ -9,7 +9,7 @@
 #include <thread>
 #include "user.h"
 using namespace std;
-
+mutex m;
 vector<user> users;//储存所有用户的容器
 extern void print_usage();
 extern queue<string> cmdseq;

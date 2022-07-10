@@ -475,7 +475,7 @@ void user::load_task()//任务加载
 {
     if(!isFileExists_ifstream(_id)) return;
     fstream in;
-    in.open("whx", ios::in);
+    in.open(_id, ios::in);
     if(in.fail())
     {
         cerr<<"错误：打开文件失败。"<<endl;
