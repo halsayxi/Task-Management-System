@@ -33,7 +33,7 @@ extern queue<string> cmdseq;
 extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
 
-void process_all(user& usr)
+void process_all(user& usr, int& exit_flag)
 {
     string cmd;
     while(1)
@@ -45,13 +45,23 @@ void process_all(user& usr)
         }
         cmd=cmdseq.front();
         cmdseq.pop();
-        task_process(usr,cmd);
+        if (task_process(usr,cmd) == 1)
+        {
+            // promiseObj.set_value(1);
+            exit_flag = 1;
+            break;
+        }
+        // else promiseObj.set_value(0);
     }
 }
 
 int task_process(user& usr, string cmd)
 {
-    if(cmd=="exit") usr.exit_task();
+    if(cmd=="exit") 
+    {
+        // usr.exit_task();
+        return 1;
+    }
     if(cmd=="showtask") usr.print_task();
     if(cmd=="donetask") usr.done_task();
     if(cmd=="deltask") usr.delete_task();

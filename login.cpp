@@ -164,7 +164,10 @@ int login()
                 case 1: print_user(name, pw); break;
                 case 2: change_user(name, pw); return 0;
                 case 3: delete_user(name, pw); return 0;
-                case 4: task_management(name, pw); break;
+                case 4: 
+                {
+                    task_management(name, pw); break;
+                }
                 case 5: return 1;          //返回1，跳回原函数后不挂起
                 default: cout<<"Please input an integer between 1 and 5!\n";
             }

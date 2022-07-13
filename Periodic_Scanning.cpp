@@ -107,12 +107,13 @@ void user::remind_task()//任务提醒
         cout<<"\nmytask is empty!\n";
     }
 }
-
-void user::remind_all()
+// void user::remind_all()
+void user::remind_all(int &exit_flag)
 {
     while(1)
     {
         remind_task();
-        sleep(10);
+        if (exit_flag == 1) return;
+        sleep(5);
     }
 }

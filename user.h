@@ -7,6 +7,8 @@
 #include <cstring>
 #include <mutex>
 #include <unistd.h>
+#include <future>
+#include <utility>
 using namespace std;
 
 
@@ -71,7 +73,9 @@ public:
     void insert_task();//任务录入
     void delete_task();//任务删除
     void print_task();//任务显示
-    void remind_all();
+
+    // void remind_all();
+    void remind_all(int &exit_flag);
     void remind_task();//任务提醒
     void done_task();//修改任务信息
     void load_task();//任务加载
@@ -84,5 +88,5 @@ user login(int &flag);//登录账户
 // Task_Management.cpp
 int task_process(user& usr, string task);
 
-void process_all(user& usr);
+void process_all(user& usr, int& exit_flag);
 #endif
