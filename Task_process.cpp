@@ -27,31 +27,34 @@ void printMap(map<key,task>& m)
     cout<<endl;
 }
 
-
+extern int debug;
 extern mutex m; // for multithread use -- lock
 extern queue<string> cmdseq;
 extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
+extern void DelLineData(string fileName);
 
 void process_all(user& usr, int& exit_flag)
 {
     string cmd;
     while(1)
     {
-        if(cmdseq.size()==0)
+        printf("Please enter showtask or donetask or deltask or addtask or exit.\n > ");
+        if (debug == 0) cin>>cmd;
+        else
         {
-            printf("Please enter showtask or donetask or deltask or addtask or exit.\n > ");
-            input2cmdseq();
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return;
+            testfile >> cmd;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << cmd;
         }
-        cmd=cmdseq.front();
-        cmdseq.pop();
         if (task_process(usr,cmd) == 1)
         {
-            // promiseObj.set_value(1);
             exit_flag = 1;
             break;
         }
-        // else promiseObj.set_value(0);
     }
 }
 
@@ -60,12 +63,13 @@ int task_process(user& usr, string cmd)
     if(cmd=="exit") 
     {
         // usr.exit_task();
+        cout << "\nProgram will return to login page in 5 seconds\n";
         return 1;
     }
     if(cmd=="showtask") usr.print_task();
-    if(cmd=="donetask") usr.done_task();
-    if(cmd=="deltask") usr.delete_task();
-    if(cmd=="addtask") usr.insert_task();
+    if(cmd=="donetask") {cout << "\n=========Done Task=========\n";usr.done_task();}
+    if(cmd=="deltask") {cout << "\n=========Delete Task=========\n";usr.delete_task();}
+    if(cmd=="addtask") {cout << "\n=========Add Task=========\n";usr.insert_task();}
     return 0;
 }
 
@@ -95,10 +99,10 @@ void ReadFile(const string& filename)//目前没有用上 但是后续可以将a
 }
 
 
-string cmdseq_to_file_time()
+string cmdseq_to_file_time(string input_str)
 {
-    string input_str=cmdseq.front();//获取输入时间 格式为dd/mm[/yyyy]_[hh][:mm], [日期/月份/年份_小时:分钟:00]
-    cmdseq.pop();
+    // string input_str=cmdseq.front();//获取输入时间 格式为dd/mm[/yyyy]_[hh][:mm], [日期/月份/年份_小时:分钟:00]
+    // cmdseq.pop();
     
     string ans="2022-00-00 08:00:00";
     bool is_time=false;//标记用户是否输入当日具体时间
@@ -175,56 +179,85 @@ void user::insert_task()//任务录入
     task tmp_task;
     key tmp_key;
 
-    if(cmdseq.size()!=0) clear_queue(cmdseq);
-    if(cmdseq.size()==0)
+    printf("\nPlease enter the task name.\n > ");
+    if (debug == 0) cin>>tmp_task.name;
+    else
     {
-        printf("Please enter the task name.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> tmp_task.name;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << tmp_task.name;
     }
-    tmp_task.name=cmdseq.front();
-    cmdseq.pop();
-    
-    if(cmdseq.size()!=0) clear_queue(cmdseq);
-    if(cmdseq.size()==0)
+
+    string task_type;
+    printf("\nPlease enter the task type.\nYou can enter Study or Entertainment or Living.(The enter annot be empty.)\nIf other content is entered, the default task type is Living.\n > "); 
+    if (debug == 0) cin>>task_type;
+    else
     {
-        printf("Please enter the task type.\nYou can enter Study or Entertainment or Living.(The enter annot be empty.)\nIf other content is entered, the default task type is Living.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> task_type;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << task_type;
     }
-    if((cmdseq.front()=="study")||(cmdseq.front()=="Study"))
+
+    if((task_type=="study")||(task_type=="Study"))
         tmp_task.type=0;
-    else if((cmdseq.front()=="entertainment")||(cmdseq.front()=="Entertainment"))
+    else if((task_type=="entertainment")||(task_type=="Entertainment"))
         tmp_task.type=1;
     else
         tmp_task.type=2;
-    cmdseq.pop();
     
-    if(cmdseq.size()==0)
+    string task_prio;
+    printf("\nPlease enter the task priority.\nYou can enter High or Medium or Low.(The enter annot be empty.)\nIf other content is entered, the default task type is Low.\n > ");
+    if (debug == 0) cin>>task_prio;
+    else
     {
-        printf("Please enter the task priority.\nYou can enter High or Medium or Low.(The enter annot be empty.)\nIf other content is entered, the default task type is Low.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> task_prio;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << task_prio;
     }
-    if((cmdseq.front()=="high")||(cmdseq.front()=="High"))
+    if((task_prio=="high")||(task_prio=="High"))
         tmp_task.priority=0;
         
-    else if((cmdseq.front()=="medium")||(cmdseq.front()=="Medium"))
+    else if((task_prio=="medium")||(task_prio=="Medium"))
         tmp_task.priority=1;
     else
         tmp_task.priority=2;
-    cmdseq.pop();
-        
-    if(cmdseq.size()==0)
+    
+    printf("\nPlease enter the task reminder time.\nThe format is dd/mm[/yyyy]_[hh][:mm], [Date (required)/Month (required)/Year_Hour:Minute].\nExample：01/01/2021_12:30 or 01/01 or 01/01/2021.\n > ");
+    string remind_time;
+    if (debug == 0) cin>>remind_time;
+    else
     {
-        printf("Please enter the task reminder time.\nThe format is dd/mm[/yyyy]_[hh][:mm], [Date (required)/Month (required)/Year_Hour:Minute].\nExample：01/01/2021_12:30 or 01/01 or 01/01/2021.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> remind_time;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << remind_time;
     }
-    tmp_task.remind_time=cmdseq_to_file_time();
+    tmp_task.remind_time=cmdseq_to_file_time(remind_time);
+    printf("\nPlease enter the task start time.\nThe format is dd/mm[/yyyy]_[hh][:mm], [Date (required)/Month (required)/Year_Hour:Minute].\nExample：01/01/2021_12:30 or 01/01 or 01/01/2021.\n > ");
+    string start_time;
+    if (debug == 0) cin>>start_time;
+    else
+    {
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> start_time;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << start_time;
+    }
+    tmp_task.start_time=cmdseq_to_file_time(start_time);
 
-    if(cmdseq.size()==0)
-    {
-        printf("Please enter the task start time.\nThe format is dd/mm[/yyyy]_[hh][:mm], [Date (required)/Month (required)/Year_Hour:Minute].\nExample：01/01/2021_12:30 or 01/01 or 01/01/2021.\n > ");
-        input2cmdseq();
-    }
-    tmp_task.start_time=cmdseq_to_file_time();
     string tmp=tmp_task.start_time;
     
     string::size_type pos;
@@ -283,7 +316,8 @@ void user::insert_task()//任务录入
         outfile<<"Incomplete"<<endl;
     else outfile<<"Completed"<<endl;
     outfile.close();
-    printf("Insert task successfully\n");
+    printf("\nInsert task successfully\n");
+    if (debug == 1) sleep(2);
 }
 
 void user::delete_task()//任务删除
@@ -301,15 +335,19 @@ void user::delete_task()//任务删除
     bool del_flag=false;
     //根据任务id具有唯一性，确定要删除的任务
     string id,estr;
-    if(cmdseq.size()!=0)
-    clear_queue(cmdseq);
-    if(cmdseq.size()==0)
+
+    printf("\nPlease enter the task id to be deleted.\n > ");
+    if (debug == 0) cin>>id;
+    else
     {
-        printf("Please enter the task id to be deleted.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> id;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << id;
     }
-    id=cmdseq.front();
-    cmdseq.pop();
+
 
 
     //在文件中删除该任务
@@ -378,15 +416,19 @@ void user::done_task()//任务完成
     bool done_flag=false;
     //根据任务id具有唯一性，确定完成的任务
     string id,estr;
-    if(cmdseq.size()!=0)
-    clear_queue(cmdseq);
-    if(cmdseq.size()==0)
+
+    printf("\nPlease enter the id of the completed task.\n > ");
+    // cin >> id;
+    if (debug == 0) cin>>id;
+    else
     {
-        printf("Please enter the id of the completed task.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> id;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << id;
     }
-    id=cmdseq.front();
-    cmdseq.pop();
     
     //在文件中标记该任务已完成
     while(getline(in,estr))//得到原文件中一行的内容
@@ -544,7 +586,7 @@ void print(task tmp_task)//展示任务信息
 
 void print_tablehead()//打印表头
 {
-    printf("|%s    |%s          |%s|%s         |%s           |%s          |%s|\n", "task name", "task ID", "priority", "type", "start time",  "remind time","completion status");
+    printf("\n|%s    |%s          |%s|%s         |%s           |%s          |%s|\n", "task name", "task ID", "priority", "type", "start time",  "remind time","completion status");
     //   name id prio class time alarm done
     printf("|-------------|-----------------|--------|-------------|---------------------|---------------------|-----------------|\n");
 }
@@ -552,34 +594,38 @@ void print_tablehead()//打印表头
 void user::print_task()//任务显示 根据启动时间
 {
     string option;
-    if(cmdseq.size()!=0)
-    clear_queue(cmdseq);
-    if(cmdseq.size()==0)//获取展示任务范围
+    printf("\nTo view all tasks please enter 0. To view this month's tasks please enter 1. To view this day's tasks please enter 2.\n > ");
+    if (debug == 0) cin>>option;
+    else
     {
-        printf("To view all tasks please enter 0. To view this month's tasks please enter 1. To view this day's tasks please enter 2.\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> option;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << option;
     }
-    option=cmdseq.front();
-    cmdseq.pop();
     
     string option2;
-    if(cmdseq.size()!=0)
-    clear_queue(cmdseq);
-    if(cmdseq.size()==0)//获取展示任务排列方式
+    printf("\nEnter 0 for start-up time order, 1 for priority order, 2 for type order\n > ");
+    if (debug == 0) cin>>option2;
+    else
     {
-        printf("Enter 0 for start-up time order, 1 for priority order, 2 for type order\n > ");
-        input2cmdseq();
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> option2;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << option2;
     }
-    option2=cmdseq.front();
-    cmdseq.pop();
-    
+
     if(option=="0")//显示所有任务
     {
         if(option2=="0")//按照启动时间顺序展示
         {
             if(user::mytask.size()==0)
             {
-                printf("There are no planned task.\n");
+                printf("\nThere are no planned task.\n");
                 return;
             }
 
@@ -590,6 +636,7 @@ void user::print_task()//任务显示 根据启动时间
                 print(t.second);
             }
             printf("Tasks display complete!\n");
+            
         }
         
         else if(option2=="1")//按照优先级展示 优先级内部仍然按照启动时间展示
@@ -884,6 +931,7 @@ void user::print_task()//任务显示 根据启动时间
                 printf("Tasks display complete!\n");
         }
     }
+    if (debug == 1) sleep(5);
 
 }
 

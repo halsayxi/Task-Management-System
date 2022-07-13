@@ -89,7 +89,7 @@ void user::remind_task()//任务提醒
                 }
                 if(i->second.remind_time<now_time)
                 {
-                    cout<<"Schedule reminder——\n"<<"Your schedule "<<i->second.name<<" will start at "<<i->second.start_time<<"\nCurrent time: "<< now_time <<endl;
+                    cout<<"\n——————Schedule reminder——————\n"<<"Your schedule "<<i->second.name<<" will start at "<<i->second.start_time<<"\nCurrent time: "<< now_time <<endl;
                     i->second.remind_flag=true;
                 }
                 i++;

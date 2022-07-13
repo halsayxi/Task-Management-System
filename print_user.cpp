@@ -7,16 +7,25 @@
 using namespace std;
 
 extern string get_hash(string);
-
+extern void DelLineData(string fileName);
+extern int debug;
 void print_user(string Name, string Password)
 {
     string pw, pw_in, pw_in2;
+    if (debug == 0) system("clear");
 
-    system("clear");
-
-    cout<<"Please enter the password:";
+    cout<<"\nPlease enter the password:";
     system("stty -echo");
-    cin>>pw;
+    if (debug == 0) cin>>pw;
+    else
+    {
+        ifstream testfile("testfile.txt");
+        if (!testfile.is_open()) return;
+        testfile >> pw;
+        testfile.close();
+        DelLineData("testfile.txt");
+        cout << pw;
+    }
     system("stty echo");
     cout<<endl;
     
@@ -24,6 +33,7 @@ void print_user(string Name, string Password)
     pw_in2 = get_hash(pw);
     
     if (pw_in != pw_in2) {cout<<"Wrong password!"; return;}
-    cout<<"Username:"<<Name<<endl;
-    cout<<"Password:"<<Password<<endl;
+    cout << "\n=======User Information=======\n";
+    cout <<"Username:"<<Name<<endl;
+    cout <<"Password:"<<Password<<endl;
 }

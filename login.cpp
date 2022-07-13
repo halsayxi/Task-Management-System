@@ -13,6 +13,8 @@ extern void print_user(string, string);
 extern void change_user(string, string);
 extern void delete_user(string, string);
 extern void task_management(string, string);
+extern void DelLineData(string fileName);
+extern int debug;
 
 
 int login()
@@ -27,13 +29,38 @@ int login()
     //while循环用于找不到用户信息时
     while(1)
     {
-        system("clear");
-        cout<<"Please enter your user name:";
-        cin>>name;
+        if (debug == 0) system("clear");
+        else
+        {
+            cout << "\n========Login=========\n";
+            sleep(2);
+        }
+        cout<<"\nPlease enter your user name:";
+        // cin>>name;
+        if (debug == 0) cin>>name;
+        else
+        {
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return -1;
+            testfile >> name;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << name << "\n";
+        }
         cout<<"Please enter the password:";
         
         system("stty -echo");
-        cin>>pw;
+        // cin>>pw;
+        if (debug == 0) cin>>pw;
+        else
+        {
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return -1;
+            testfile >> pw;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << pw;
+        }
         system("stty echo");
         cout<<endl;
 
@@ -63,12 +90,12 @@ int login()
         }
     }
     
-    cout<<"Welcome! User "<<name<< "\n" <<endl;
+    cout<<"Welcome! User "<<name<< "!\n" <<endl;
     
     //while循环用于回到原界面
     while(1)
     {
-        system("clear");
+        if (debug == 0 ) system("clear");
         if (name == "root" && pw_in == "e10adc3949ba59abbe56e057f20f883e")
         {
             cout<<"This is a super account\n";
@@ -157,7 +184,18 @@ int login()
         else
         {
             cout<<"Please choose the sevice you need:\n1.print account information\n2.change account information\n3.delete this account\n4.task management\n5.quit\n"<<"> ";
-            cin>>choice2;
+            if (debug == 0) cin>>choice2;
+            else
+            {
+                
+                ifstream testfile("testfile.txt");
+                if (!testfile.is_open()) return -1;
+                testfile >> choice2;
+                testfile.close();
+                DelLineData("testfile.txt");
+                cout << choice2;
+                
+            }
 
             switch(choice2)
             {
@@ -166,10 +204,12 @@ int login()
                 case 3: delete_user(name, pw); return 0;
                 case 4: 
                 {
+                    cout << "\n========Task Management=========\n";
+                    sleep(2);
                     task_management(name, pw); break;
                 }
                 case 5: return 1;          //返回1，跳回原函数后不挂起
-                default: cout<<"Please input an integer between 1 and 5!\n";
+                default: cout<<"\nPlease input an integer between 1 and 5!\n";
             }
             sleep(4);
         }

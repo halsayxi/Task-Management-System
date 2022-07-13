@@ -8,8 +8,9 @@
 
 using namespace std;
 
+extern int debug;
 extern string get_hash(string);
-
+extern void DelLineData(string fileName);
 void add_user()
 {
     string name;
@@ -20,17 +21,50 @@ void add_user()
     //while循环用于密码输入不符合规范时
     while(1)
     {
-        system("clear");
-        cout<<"Please enter your user name(Space is forbidden):";
-        cin>>name;
-        cout<<"Please enter the new 6-digit password:";
+        if (debug == 0) system("clear");
+        else
+        {
+            cout << "\n========Adding user=========\n";
+            sleep(2);
+        }
+        cout<<"\nPlease enter your user name(Space is forbidden):";
+        if (debug == 0) cin>>name;
+        else
+        {
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return;
+            testfile >> name;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << name << "\n";
+        }
+
+        cout<<"\nPlease enter the new 6-digit password:";
         system("stty -echo");
-        cin>>pw;
+        if (debug == 0) cin>>pw;
+        else
+        {
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return;
+            testfile >> pw;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << pw << "\n";
+        }
         system("stty echo");
         cout<<endl;
-        cout<<"Confirm your password:";
+        cout<<"\nConfirm your password:";
         system("stty -echo");
-        cin>>pw2;
+        if (debug == 0) cin>>pw2;
+        else
+        {
+            ifstream testfile("testfile.txt");
+            if (!testfile.is_open()) return;
+            testfile >> pw2;
+            testfile.close();
+            DelLineData("testfile.txt");
+            cout << pw2 << "\n";
+        }
         system("stty echo");
         cout<<endl;
 
