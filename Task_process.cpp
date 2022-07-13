@@ -4,17 +4,6 @@
 
 #endif
 
-
-void printMap(map<key,task>& m)
-{
-    for (map<key,task>::iterator it=m.begin();it!=m.end();it++)
-    {
-        cout<<"name= "<<it->second.name<<" start_time= "<<it->second.start_time<<endl;
-        cout<<"id= "<<it->second.task_id<<endl;
-    }
-    cout<<endl;
-}
-
 extern int debug;
 extern mutex m; // for multithread use -- lock
 extern void clear_queue(queue<string>& q);
