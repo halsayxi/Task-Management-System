@@ -1,8 +1,3 @@
-#include <iostream>
-#include <queue>
-#include <string>
-#include <cstring>
-#include <fstream>
 #include "user.h"
 using namespace std;
 
@@ -14,7 +9,7 @@ void print_usage()
 "### 打开系统使用说明\n"
 "$./test -h\n"
 "\n"
-"### 调试系统\n"
+"### 调试系统(需要testfile.txt中有内容，并且使用一次就需要添加一次testfile.txt的内容)\n"
 "$./test -d\n"
 "\n"
 "### 运行系统\n"
@@ -22,9 +17,9 @@ void print_usage()
 "\n"
 "### 登录或注册用户\n"
 "\n"
-"$ 1. [新用户名] [新用户密码] [再次输入新用户密码]（注册新账号）\n"
+"$ 1. [新用户名] --> [新用户密码] --> [再次输入新用户密码]（注册新账号）\n"
 "\n"
-"$ 2. [用户名] [用户密码]（登录账号）\n"
+"$ 2. [用户名] --> [用户密码]（登录账号）\n"
 "\n"
 "$ 3. （退出系统）\n"
 "\n"
@@ -34,7 +29,7 @@ void print_usage()
 "\n"
 "   $ 1. [用户密码] （打印账号信息）\n"
 "\n"
-"   $ 2. [用户密码] [新用户名] [新用户密码]（修改账号信息）\n"
+"   $ 2. [用户密码] --> [新用户名] --> [新用户密码]（修改账号信息）\n"
 "\n"
 "   $ 3. [用户密码] （删除账号）\n"
 "\n"
@@ -56,7 +51,7 @@ void print_usage()
 "\n"
 "### 管理任务\n"
 "\n"
-"$ addtask [任务名称] [任务类型] [任务优先级] [任务提醒时间] [任务时间]\n"
+"$ addtask --> [任务名称] --> [任务类型] --> [任务优先级] --> [任务提醒时间] --> [任务时间]\n"
 "\n"
 "   [任务名称]：任意长度字符串，以回车键结束\n"
 " \n"
@@ -82,47 +77,24 @@ void print_usage()
 "   [任务时间]：时间格式同 [任务提醒时间]\n"
 "\n"
 "\n"
-"$ showtask [任务时间范围] [任务排列方式]\n"
+"$ showtask --> [任务时间范围] --> [任务排列方式]\n"
 "\n"
 "   [任务时间范围]：0 | 1 | 2\n"
 "                 0：全部；1：当月；2：当天\n"
 "   [任务排列方式]：0 | 1 | 2\n"
 "                 0：时间；1：优先级；2：类型\n"
 " \n"
-"$ deltask [任务id] \n"
+"$ deltask --> [任务id] \n"
 " \n"
 "  任务id会在“$showtask”功能中给出\n"
 "\n"
-"$ donetask [任务id]\n"
+"$ donetask --> [任务id]\n"
 "\n"
 "  任务id会在“$showtask”功能中给出\n"
 "\n"
 "$ exit \n"
 "\n";
    cout<<str;
-}
-
-queue<string> cmdseq;
-void input2cmdseq()
-{
-    string tmp = "";
-    char c;
-    while(1)
-    {
-        cin >> tmp;
-        cmdseq.push(tmp);
-        c = getchar();
-        if (c == '\n')
-        {
-            break;
-        }
-    }
-}
-
-void clear_queue(queue<string>& q)
-{
-    queue<string> empty;
-    swap(empty, q);
 }
 
 string CharToStr(char * contentChar)

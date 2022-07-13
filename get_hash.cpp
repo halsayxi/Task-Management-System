@@ -1,5 +1,4 @@
-#include<iostream>
-#include<string>
+#include "user.h"
 using namespace std;
 
 #define shift(x, n) (((x) << (n)) | ((x) >> (32-(n))))//右移的时候，高位一定要补零，而不是补充符号位

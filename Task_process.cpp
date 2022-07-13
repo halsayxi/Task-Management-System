@@ -1,19 +1,7 @@
 #ifndef TASK
 #define TASK
 #include "user.h"
-#include <assert.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <exception>
-#include <string>
-#include <cstring>
-#include <stdio.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <queue>
-#include <map>
-#include <ctime>
+
 #endif
 
 
@@ -29,8 +17,6 @@ void printMap(map<key,task>& m)
 
 extern int debug;
 extern mutex m; // for multithread use -- lock
-extern queue<string> cmdseq;
-// extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
 extern void DelLineData(string fileName);
 
@@ -63,7 +49,7 @@ int task_process(user& usr, string cmd)
     if(cmd=="exit") 
     {
         usr.exit_task();
-        cout << "\nProgram will return to login page in 5 seconds\n";
+        cout << "\nProgram will return to account page in 5 seconds\n";
         return 1;
     }
     if(cmd=="showtask") usr.print_task();
@@ -100,10 +86,7 @@ int task_process(user& usr, string cmd)
 
 
 string cmdseq_to_file_time(string input_str)
-{
-    // string input_str=cmdseq.front();//获取输入时间 格式为dd/mm[/yyyy]_[hh][:mm], [日期/月份/年份_小时:分钟:00]
-    // cmdseq.pop();
-    
+{   
     string ans="2022-00-00 08:00:00";
     bool is_time=false;//标记用户是否输入当日具体时间
     

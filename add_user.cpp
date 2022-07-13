@@ -1,11 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string>
-
+#include "user.h"
 using namespace std;
 
 extern int debug;
@@ -17,7 +10,6 @@ void add_user()
     string pw, pw2, pw_in;
     string fileData;
 
-    
     //while循环用于密码输入不符合规范时
     while(1)
     {

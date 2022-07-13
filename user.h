@@ -1,14 +1,23 @@
 #ifndef USER_H
 #define USER_H
 
+#include <assert.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <exception>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <map>
 #include <string>
 #include <cstring>
 #include <mutex>
-#include <unistd.h>
-#include <future>
+#include <queue>
+#include <thread>
 #include <utility>
+#include <ctime>
+
 using namespace std;
 
 
@@ -74,7 +83,6 @@ public:
     void delete_task();//任务删除
     void print_task();//任务显示
 
-    // void remind_all();
     void remind_all(int &exit_flag);
     void remind_task();//任务提醒
     void done_task();//修改任务信息

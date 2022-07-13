@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "user.h"
 using namespace std;
 
 extern string get_hash(string);

@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+
 #include "user.h"
 using namespace std;
 
@@ -13,7 +8,6 @@ extern int login(void);
 extern void add_user(void);
 extern void print_usage();
 extern void DelLineData(string fileName);
-extern void ReadLineData(string fileName, int lineNum, string& command);
 int main(int argc, char *argv[])
 {
     string command;
@@ -30,7 +24,7 @@ int main(int argc, char *argv[])
             }
             case 'd':
             {
-                debug = 1; break;// Debug mode is activated
+                debug = 1; break;// Test mode is activated
             }
             default:debug = 0;
         }
@@ -67,7 +61,7 @@ int main(int argc, char *argv[])
                 testfile >> choice;
                 testfile.close();
                 DelLineData("testfile.txt");
-                cout << choice;
+                cout << choice << "\n";
             }
             if (choice == 1) add_user();
             else if (choice == 2) status = login();

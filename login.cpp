@@ -1,10 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
+#include "user.h"
 
 using namespace std;
 

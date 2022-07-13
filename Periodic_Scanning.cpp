@@ -1,15 +1,6 @@
 #ifndef SCAN
 #define SCAN
 #include "user.h"
-#include <iostream>
-#include <fstream>
-#include <exception>
-#include <string>
-#include <cstring>
-#include <stdio.h>
-#include <queue>
-#include <map>
-#include <ctime>
 #endif
 using namespace std;
 extern mutex m; // for multithread use -- lock
@@ -107,7 +98,7 @@ void user::remind_task()//任务提醒
         cout<<"\nmytask is empty!\n";
     }
 }
-// void user::remind_all()
+
 void user::remind_all(int &exit_flag)
 {
     while(1)

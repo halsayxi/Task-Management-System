@@ -1,17 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdio.h>
-#include <queue>
-#include <thread>
 #include "user.h"
 using namespace std;
 
 extern mutex m;
 extern void print_usage();
-extern queue<string> cmdseq;
-extern void input2cmdseq();
-extern void clear_queue(queue<string>& q);
 
 void task_management(string name,string pw)
 {
@@ -24,6 +15,5 @@ void task_management(string name,string pw)
 
     task_arrangement.join();
     task_scanning.join();
-    if(cmdseq.size()!=0) clear_queue(cmdseq);
     return;
 }
