@@ -65,10 +65,10 @@ public:
     };
     ~user(){};
 
-    void insert_user();//添加账号
-    void delete_user();//注销账号
-    void print_user();//显示账号信息
-    void change_user(int option);//修改账号信息
+    void add_user(string name, string pw);//添加账号
+    void delete_user(string name, string pw);//注销账号
+    void print_user(string name, string pw);//显示账号信息
+    void change_user(string name, string pw);//修改账号信息
     
     void insert_task();//任务录入
     void delete_task();//任务删除
@@ -83,7 +83,7 @@ public:
 };
 
 // Account_Management.cpp
-user login(int &flag);//登录账户
+int login();//登录账户
 
 // Task_Management.cpp
 int task_process(user& usr, string task);

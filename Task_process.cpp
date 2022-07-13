@@ -62,7 +62,7 @@ int task_process(user& usr, string cmd)
 {
     if(cmd=="exit") 
     {
-        // usr.exit_task();
+        usr.exit_task();
         cout << "\nProgram will return to login page in 5 seconds\n";
         return 1;
     }

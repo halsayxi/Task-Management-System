@@ -168,6 +168,11 @@ int login()
                                 const char* filePath = Name.data();
                                 flag_3 = remove(filePath);
 
+                                //删除“用户名+count”文件
+                                string filename = Name + "count";
+                                const char* filePath_2 = filename.data();
+                                flag = remove(filePath_2);
+
                                 cout<<"account deleted successfully!\n";
                                 sleep(4);
                                 break;
