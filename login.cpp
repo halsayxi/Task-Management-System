@@ -69,7 +69,7 @@ int login()
         if (name == "root" && pw_in == "e10adc3949ba59abbe56e057f20f883e") break; //user中无超级用户信息，故不从中查找
         else
         {
-            ifstream in("users");   
+            ifstream in("users.data");   
             while(getline(in,fileData))
             {
                 if(!fileData.compare(name)) 
@@ -108,7 +108,7 @@ int login()
                         sleep(4);
                         break;
                 case 2: {
-                            ofstream out("root",ofstream::app);
+                            ofstream out("root.data",ofstream::app);
                             out.close();
                             task_management(name, pw); 
                             sleep(4);
@@ -116,7 +116,7 @@ int login()
                         }
                 case 3: {
                             system("clear");
-                            ifstream in("users");
+                            ifstream in("users.data");
                             if (!in) {cerr<<"No account existed! Please register an account first.\n"; return 0;}
                             while(getline(in, fileData))
                             {
@@ -133,9 +133,9 @@ int login()
                             cout<<"Please enter the user name of this account.\n";
                             cin>>Name;
                             //删除users中用户信息
-                            ifstream in("users");  
+                            ifstream in("users.data");  
                             if (!in) {cerr<<"No account existed! Please register an account first.\n"; return 0;}
-                            ofstream out("tmp");
+                            ofstream out("tmp.data");
 
                             while(getline(in,fileData))//得到原文件中一行的内容
                             {
@@ -152,8 +152,8 @@ int login()
                             
                             if (flag_2)
                             {
-                                fstream outfile("users", ios::out);
-                                fstream infile("tmp", ios::in);
+                                fstream outfile("users.data", ios::out);
+                                fstream infile("tmp.data", ios::in);
                                 while(getline(infile, fileData)) //将中间文件的内容写到原文件（覆盖）
                                 {
                                     outfile<<fileData<<"\n";
@@ -161,17 +161,19 @@ int login()
                                 outfile.close();//关闭流
                                 infile.close();
                                 
-                                const char* path = "tmp";
+                                const char* path = "tmp.data";
                                 remove(path);//删除tmp
                                 
                                 //删除用户存放任务的文件
-                                const char* filePath = Name.data();
+                                const char* filePath = (Name + ".data").data();
+                                // const char* data_filePath =  (string(filePath) + ".data").c_str();
                                 flag_3 = remove(filePath);
 
                                 //删除“用户名+count”文件
-                                string filename = Name + "count";
+                                string filename = Name + "count" + ".data";
+
                                 const char* filePath_2 = filename.data();
-                                flag = remove(filePath_2);
+                                remove(filePath_2);
 
                                 cout<<"account deleted successfully!\n";
                                 sleep(4);

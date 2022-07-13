@@ -166,29 +166,3 @@ void DelLineData(string fileName)
 	out<<strFileData;
 	out.close();
 }
-
-
-void ReadLineData(string fileName, int lineNum, string& command)
-{
-    char* data=NULL;
-	ifstream in;
-	in.open(fileName);
- 
-	int line = 1;
-    if (lineNum == 1)
-        in >> command;
-    else 
-    {
-        while (in.getline(data, 32))
-        {
-            if (lineNum - 1== line)
-            {
-                break;
-            }
-            line ++ ;
-        }
-        in >> command;
-    }
-    free(data);
-	in.close();
-}

@@ -69,7 +69,7 @@ void add_user()
         cout<<endl;
 
         //检查该账号是否已注册
-        ifstream in("users");
+        ifstream in("users.data");
         if (in)
         {
             while(getline(in,fileData))
@@ -93,14 +93,15 @@ void add_user()
     pw_in = get_hash(pw);
 
     //新用户信息录入user文件
-    ofstream out("users",ofstream::app);
+    ofstream out("users.data",ofstream::app);
     if (!out) {cerr<<"error! Unable to save the file.\n"; return;}
     out<<name<<endl;
     out<<pw_in<<endl;
     out.close();
 
     //用于存放任务
-    ofstream outfile(name);
+    string data_name = name + ".data";
+    ofstream outfile(data_name);
     if (!outfile) {cerr<<"error! Unable to create the file.\n"; return;}
     outfile.close();
 

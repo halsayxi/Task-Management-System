@@ -23,9 +23,9 @@ void delete_user(string Name, string Password)
     if (pw != Password) {cout<<"Wrong password!"; return;}
 
     //删除user中用户信息
-    ifstream in("users");  
+    ifstream in("users.data");  
     if (!in) {cerr<<"No account existed! Please register an account first.\n"; return;}
-    ofstream out("tmp");
+    ofstream out("tmp.data");
 
     while(getline(in,fileData))//得到原文件中一行的内容
     {
@@ -39,8 +39,8 @@ void delete_user(string Name, string Password)
 
     in.close();//关闭流
     out.close();
-    fstream outfile("users", ios::out);
-    fstream infile("tmp", ios::in);
+    fstream outfile("users.data", ios::out);
+    fstream infile("tmp.data", ios::in);
     while(getline(infile, fileData)) //将中间文件的内容写到原文件（覆盖）
     {
     outfile<<fileData<<"\n";
@@ -48,15 +48,16 @@ void delete_user(string Name, string Password)
     outfile.close();//关闭流
     infile.close();
 
-    const char* path = "tmp";
+    const char* path = "tmp.data";
     remove(path);//删除tmp
 
     //删除用户存放任务的文件
-    const char* filePath = Name.data();
+    string data_filePath = Name + ".data";
+    const char* filePath = data_filePath.data();
     flag = remove(filePath);
 
     //删除“用户名+count”文件
-    string filename = Name + "count";
+    string filename = Name + "count" + ".data";
     const char* filePath_2 = filename.data();
     flag = remove(filePath_2);
 

@@ -47,7 +47,7 @@ void change_user(string Name, string Password)
         cout<<endl;
 
         //检查该账号是否已注册
-        ifstream in("users");  
+        ifstream in("users.data");  
         if(in) 
         {
             while(getline(in,fileData))
@@ -82,14 +82,14 @@ void change_user(string Name, string Password)
                 if(Name!=name_new)
                 {
                     //删除user文件中原用户信息，加入新用户信息
-                    ifstream in("users");
+                    ifstream in("users.data");
                     if (!in)
                     {
                         cerr<<"No account existed! Please register an account first.\n";
                         sleep(4);
                         return;
                     }
-                    ofstream out("tmp");
+                    ofstream out("tmp.data");
 
                     while(getline(in,fileData))//得到原文件中一行的内容
                     {
@@ -105,8 +105,8 @@ void change_user(string Name, string Password)
      
                     in.close();//关闭流
                     out.close();
-                    fstream outfile("users", ios::out);
-                    fstream infile("tmp", ios::in);
+                    fstream outfile("users.data", ios::out);
+                    fstream infile("tmp.data", ios::in);
                     while(getline(infile, fileData)) //将中间文件的内容写到原文件（覆盖）
                     {
                         outfile<<fileData<<"\n";
@@ -114,12 +114,14 @@ void change_user(string Name, string Password)
                     outfile.close();//关闭流
                     infile.close();
                   
-                    const char* path = "tmp";
+                    const char* path = "tmp.data";
                     remove(path);//删除tmp
      
                     //存放对应任务的文件改名
-                    ifstream in2(Name);
-                    ofstream out2(name_new);
+                    string data_name = Name + ".data";
+                    string data_name_new = name_new + ".data";
+                    ifstream in2(data_name);
+                    ofstream out2(data_name_new);
 
                     while(getline(in2,taskData))//得到原文件中一行的内容
                     {
@@ -129,7 +131,7 @@ void change_user(string Name, string Password)
                     in2.close();//关闭流
                     out2.close();
                 
-                    const char* filePath_3 = Name.data();
+                    const char* filePath_3 = (Name + ".data").data();
                     flag_2 = remove(filePath_3);
 
                     if (flag_2 != 0)
@@ -140,10 +142,10 @@ void change_user(string Name, string Password)
                     }
 
                     //“用户名+count”文件改名
-                    string filename = Name + "count";
+                    string filename = Name + "count" + ".data";
                     if(isFileExists_ifstream(filename))
                     {
-                        string filename_new = name_new + "count";
+                        string filename_new = name_new + "count" + ".data";
                         ifstream in3(filename);
                         ofstream out3(filename_new);
                         in3>>taskData;

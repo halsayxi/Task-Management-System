@@ -30,7 +30,7 @@ void printMap(map<key,task>& m)
 extern int debug;
 extern mutex m; // for multithread use -- lock
 extern queue<string> cmdseq;
-extern void input2cmdseq();
+// extern void input2cmdseq();
 extern void clear_queue(queue<string>& q);
 extern void DelLineData(string fileName);
 
@@ -75,28 +75,28 @@ int task_process(user& usr, string cmd)
 
 
 
-//文件读取
-class FileError: public exception
-{
-    private:
-    string error_msg;
-    public:
-    FileError(string msg):error_msg(msg){};
-    virtual const char * what() const noexcept override
-    {return error_msg.c_str();}
-};
+// //文件读取
+// class FileError: public exception
+// {
+//     private:
+//     string error_msg;
+//     public:
+//     FileError(string msg):error_msg(msg){};
+//     virtual const char * what() const noexcept override
+//     {return error_msg.c_str();}
+// };
 
-void ReadFile(const string& filename)//目前没有用上 但是后续可以将assert改成try&throw
-{
-    fstream in;
-    in.open(filename,fstream::in);
+// void ReadFile(const string& filename)//目前没有用上 但是后续可以将assert改成try&throw
+// {
+//     fstream in;
+//     in.open(filename,fstream::in);
     
-    if(in.fail())
-    {
-        string error = "Failed to read the file.";
-        throw FileError(error);
-    }
-}
+//     if(in.fail())
+//     {
+//         string error = "Failed to read the file.";
+//         throw FileError(error);
+//     }
+// }
 
 
 string cmdseq_to_file_time(string input_str)
@@ -157,7 +157,8 @@ string cmdseq_to_file_time(string input_str)
 void user::insert_task()//任务录入
 {
     ofstream outfile;
-    outfile.open(_id,ofstream::app);
+    string data_id = _id + ".data";
+    outfile.open(data_id,ofstream::app);
     if(outfile.fail())
     {
         cerr<<"error：Failed to read the file."<<endl;
@@ -323,9 +324,10 @@ void user::insert_task()//任务录入
 void user::delete_task()//任务删除
 {
     fstream in;
-    in.open(_id, ios::in);//原文件
+    string data_id = _id + ".data";
+    in.open(data_id, ios::in);//原文件
     fstream out;
-    out.open("tmp", ios::out);//中间文件
+    out.open("tmp.data", ios::out);//中间文件
     if(in.fail())
     {
         cerr<<"error：Failed to read the file."<<endl;
@@ -369,13 +371,13 @@ void user::delete_task()//任务删除
 
     in.close();//关闭流
     out.close();
-    fstream outfile(_id, ios::out);
-    fstream infile("tmp", ios::in);
+    fstream outfile(data_id, ios::out);
+    fstream infile("tmp.data", ios::in);
     while(getline(infile, estr)) //将中间文件的内容写到原文件（覆盖）
     {
         outfile<<estr<<"\n";
     }
-    const char* path = "tmp";
+    const char* path = "tmp.data";
     remove(path);//删除tmp.txt
     outfile.close();//关闭流
     infile.close();
@@ -405,8 +407,9 @@ void user::delete_task()//任务删除
 
 void user::done_task()//任务完成
 {
-    fstream in(_id, ios::in);//原文件
-    fstream out("tmp", ios::out);//中间文件
+    string data_id = _id + ".data";
+    fstream in(data_id, ios::in);//原文件
+    fstream out("tmp.data", ios::out);//中间文件
     if(in.fail())
     {
         cerr<<"error：Failed to read the file."<<endl;
@@ -450,13 +453,13 @@ void user::done_task()//任务完成
     }
     in.close();//关闭流
     out.close();
-    fstream outfile(_id, ios::out);
-    fstream infile("tmp", ios::in);
+    fstream outfile(data_id, ios::out);
+    fstream infile("tmp.data", ios::in);
     while(getline(infile, estr)) //将中间文件的内容写到原文件（覆盖）
     {
         outfile<<estr<<"\n";
     }
-    const char* path = "tmp";
+    const char* path = "tmp.data";
     remove(path);//删除tmp.txt
     outfile.close();//关闭流
     infile.close();
@@ -944,13 +947,14 @@ bool isFileExists_ifstream(string& name)
 
 void user::load_task()//任务加载
 {
-    if(!isFileExists_ifstream(_id))
+    string data_id = _id + ".data";
+    if(!isFileExists_ifstream(data_id))
     {
         printf("File error！\n");
         return;
     }
     fstream in;
-    in.open(_id, ios::in);
+    in.open(data_id, ios::in);
     if(in.fail())
     {
         cerr<<"error：Failed to read the user file."<<endl;
@@ -1019,7 +1023,7 @@ void user::load_task()//任务加载
     in.close();
     
     string tmp_id=_id;
-    string file_count=tmp_id.append("count");
+    string file_count=tmp_id.append("count.data");
     if(!isFileExists_ifstream(file_count))
     {
         return;
@@ -1044,7 +1048,7 @@ void user::exit_task()//退出
 {
     fstream out;
     string tmp_id=_id;
-    string file_count=tmp_id.append("count");
+    string file_count=tmp_id.append("count.data");
     out.open(file_count, ios::out);
     if(out.fail())
     {
