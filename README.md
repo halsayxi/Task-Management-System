@@ -1,7 +1,9 @@
 # Task Management System
 
 ## 使用方法
-
+```
+./test
+```
 项目的编写平台是Linux，可执行文件的运行环境也是Linux，目前只有命令行操作。
 
 **获取帮助：**
