@@ -14,7 +14,7 @@ void delete_user(string Name, string Password)
     cin>>pw;
     system("stty echo");
     cout<<endl;
-    if (pw.compare(Password) != 1) {cout<<"Wrong password!"<<endl; return;}
+    if (pw != Password) {cout<<"Wrong password!"<<endl; return;}
     // if (pw != Password) {cout<<"Wrong password!"; return;}
     //删除user中用户信息
     ifstream in("users.data");  
